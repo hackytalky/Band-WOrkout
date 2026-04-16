@@ -1,0 +1,596 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #D4537E;
+    --pink-light: #FBEAF0;
+    --pink-mid: #ED93B1;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --coral: #D85A30;
+    --coral-light: #FAECE7;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --text: var(--color-text-primary);
+    --text-muted: var(--color-text-secondary);
+    --surface: var(--color-background-secondary);
+    --card: var(--color-background-primary);
+    --border: var(--color-border-tertiary);
+  }
+
+  body { font-family: 'DM Sans', sans-serif; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 0 3rem; }
+
+  .hero {
+    background: linear-gradient(135deg, #F4C0D1 0%, #E1F5EE 100%);
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 280px; height: 280px;
+    background: rgba(212,83,126,0.12);
+    border-radius: 50%;
+    top: -80px; right: -60px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 180px; height: 180px;
+    background: rgba(29,158,117,0.1);
+    border-radius: 50%;
+    bottom: -60px; left: -40px;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(212,83,126,0.15);
+    color: #993556;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    color: #26215C;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 span { color: #D4537E; font-style: italic; }
+  .hero p {
+    font-size: 15px;
+    color: #3C3489;
+    max-width: 460px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #D4537E;
+    line-height: 1;
+  }
+  .hero-stat .lbl { font-size: 11px; color: #534AB7; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 1.5rem 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { border-color: #ED93B1; color: #993556; }
+  .tab-btn.active {
+    background: #D4537E;
+    border-color: #D4537E;
+    color: white;
+  }
+  .tab-btn.active.teal { background: #1D9E75; border-color: #1D9E75; }
+  .tab-btn.active.coral { background: #D85A30; border-color: #D85A30; }
+  .tab-btn.active.amber { background: #BA7517; border-color: #BA7517; }
+  .tab-btn.active.purple { background: #534AB7; border-color: #534AB7; }
+
+  .content { padding: 1.5rem; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .section-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  .day-card {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+  .day-header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-header:hover { background: var(--surface); }
+  .day-num {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .day-num.pink { background: #FBEAF0; color: #D4537E; }
+  .day-num.teal { background: #E1F5EE; color: #1D9E75; }
+  .day-num.coral { background: #FAECE7; color: #D85A30; }
+  .day-num.amber { background: #FAEEDA; color: #BA7517; }
+
+  .day-info { flex: 1; }
+  .day-name { font-size: 15px; font-weight: 500; color: var(--text); }
+  .day-focus { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .day-toggle {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.3s;
+  }
+  .day-card.open .day-toggle { transform: rotate(180deg); }
+
+  .day-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 0.5px solid var(--border);
+  }
+  .day-card.open .day-body { display: block; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 1rem 0 0.75rem;
+  }
+
+  .exercise-list { list-style: none; }
+  .exercise-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 0 -10px;
+  }
+  .exercise-item:hover { background: var(--surface); }
+  .exercise-num {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    flex-shrink: 0;
+  }
+  .exercise-num.pink { background: #FBEAF0; color: #993556; }
+  .exercise-num.teal { background: #E1F5EE; color: #0F6E56; }
+  .exercise-num.coral { background: #FAECE7; color: #993C1D; }
+  .exercise-num.amber { background: #FAEEDA; color: #854F0B; }
+
+  .exercise-name { font-size: 14px; color: var(--text); flex: 1; }
+  .exercise-sets {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .exercise-sets.pink { background: #FBEAF0; color: #993556; }
+  .exercise-sets.teal { background: #E1F5EE; color: #0F6E56; }
+  .exercise-sets.coral { background: #FAECE7; color: #993C1D; }
+  .exercise-sets.amber { background: #FAEEDA; color: #854F0B; }
+
+  .finisher-box {
+    margin-top: 1rem;
+    padding: 12px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .finisher-box.pink { background: #FBEAF0; color: #993556; }
+  .finisher-box.teal { background: #E1F5EE; color: #0F6E56; }
+  .finisher-box .fire { font-size: 16px; }
+
+  /* Schedule */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .schedule-day {
+    text-align: center;
+    padding: 12px 6px;
+    border-radius: 12px;
+    border: 0.5px solid var(--border);
+    background: var(--card);
+  }
+  .schedule-day .dow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 6px; }
+  .schedule-day .dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    margin: 0 auto 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+  }
+  .schedule-day .dot.rest { background: var(--surface); color: var(--text-muted); }
+  .schedule-day .dot.d1 { background: #FBEAF0; color: #D4537E; }
+  .schedule-day .dot.d2 { background: #E1F5EE; color: #1D9E75; }
+  .schedule-day .dot.d3 { background: #FAECE7; color: #D85A30; }
+  .schedule-day .dot.d4 { background: #FAEEDA; color: #BA7517; }
+  .schedule-day .label { font-size: 10px; color: var(--text-muted); }
+  .schedule-day.today { border-color: #ED93B1; background: #FFF5F8; }
+
+  /* Tips */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .tip-card {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem;
+  }
+  .tip-icon { font-size: 22px; margin-bottom: 8px; }
+  .tip-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .tip-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  .goals-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+  .goal-chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .goal-chip.green { background: #EAF3DE; color: #3B6D11; }
+  .goal-chip.red { background: #FCEBEB; color: #A32D2D; }
+
+  .reminder-box {
+    background: linear-gradient(135deg, #FBEAF0, #E1F5EE);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .reminder-box h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #26215C; margin-bottom: 0.75rem; }
+  .reminder-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; color: #3C3489; }
+  .reminder-row span { font-size: 14px; }
+</style>
+
+<div class="site">
+  <div class="hero">
+    <div class="hero-badge">4-Day Resistance Band Plan</div>
+    <h1>Your Perfect <span>Body</span> Awaits</h1>
+    <p>Shoulders, glutes, back & core — designed for you. Petite, light equipment, big results.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">4</div><div class="lbl">Days / Week</div></div>
+      <div class="hero-stat"><div class="num">3</div><div class="lbl">Rest Days</div></div>
+      <div class="hero-stat"><div class="num">5</div><div class="lbl">Goals Hit</div></div>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showPage('schedule', this)">Schedule</button>
+    <button class="tab-btn" onclick="showPage('day1', this)">Day 1</button>
+    <button class="tab-btn" onclick="showPage('day2', this)">Day 2</button>
+    <button class="tab-btn" onclick="showPage('day3', this)">Day 3</button>
+    <button class="tab-btn" onclick="showPage('day4', this)">Day 4</button>
+    <button class="tab-btn" onclick="showPage('tips', this)">Tips</button>
+  </div>
+
+  <div class="content">
+
+    <!-- SCHEDULE -->
+    <div id="page-schedule" class="page active">
+      <div class="section-title">Weekly Schedule</div>
+      <div class="section-sub">Adjust to fit your lifestyle — the split is what matters.</div>
+      <div class="schedule-grid">
+        <div class="schedule-day">
+          <div class="dow">Mon</div>
+          <div class="dot d1">D1</div>
+          <div class="label">Shoulders</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Tue</div>
+          <div class="dot d2">D2</div>
+          <div class="label">Glutes</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Wed</div>
+          <div class="dot rest">—</div>
+          <div class="label">Rest</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Thu</div>
+          <div class="dot d3">D3</div>
+          <div class="label">Back</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Fri</div>
+          <div class="dot d4">D4</div>
+          <div class="label">Shape</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Sat</div>
+          <div class="dot rest">—</div>
+          <div class="label">Rest</div>
+        </div>
+        <div class="schedule-day">
+          <div class="dow">Sun</div>
+          <div class="dot rest">—</div>
+          <div class="label">Rest</div>
+        </div>
+      </div>
+
+      <div class="reminder-box">
+        <h3>Why this plan works for you</h3>
+        <div class="reminder-row"><span>✓</span> More recovery → better results</div>
+        <div class="reminder-row"><span>✓</span> Less burnout, easier to stay consistent</div>
+        <div class="reminder-row"><span>✓</span> Still hits all your goals</div>
+        <div class="reminder-row"><span>✓</span> No bulky legs, waist stays small</div>
+      </div>
+
+      <div class="section-label">Goals</div>
+      <div class="goals-row">
+        <div class="goal-chip green">Glutes</div>
+        <div class="goal-chip green">Shoulders</div>
+        <div class="goal-chip green">Toned body</div>
+        <div class="goal-chip green">Slim legs</div>
+        <div class="goal-chip green">Small waist</div>
+        <div class="goal-chip red">No obliques</div>
+        <div class="goal-chip red">No bulky legs</div>
+      </div>
+    </div>
+
+    <!-- DAY 1 -->
+    <div id="page-day1" class="page">
+      <div class="section-title">Day 1</div>
+      <div class="section-sub">Shoulders & Triceps — Priority day. Feel that burn!</div>
+      <div class="day-card open">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num pink">1</div>
+          <div class="day-info"><div class="day-name">Shoulders & Triceps</div><div class="day-focus">6 exercises + finisher</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <div class="section-label">Exercises</div>
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num pink">1</div><div class="exercise-name">Band Shoulder Press</div><div class="exercise-sets pink">4×12</div></li>
+            <li class="exercise-item"><div class="exercise-num pink">2</div><div class="exercise-name">Band Lateral Raises</div><div class="exercise-sets pink">4×15</div></li>
+            <li class="exercise-item"><div class="exercise-num pink">3</div><div class="exercise-name">Band Front Raises</div><div class="exercise-sets pink">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num pink">4</div><div class="exercise-name">Band Upright Rows</div><div class="exercise-sets pink">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num pink">5</div><div class="exercise-name">Band Overhead Tricep Extension</div><div class="exercise-sets pink">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num pink">6</div><div class="exercise-name">Chair Dips</div><div class="exercise-sets pink">3×10</div></li>
+          </ul>
+          <div class="finisher-box pink">
+            <span class="fire">🔥</span>
+            <span>Finisher: Lateral Raise Hold — 20 sec × 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div id="page-day2" class="page">
+      <div class="section-title">Day 2</div>
+      <div class="section-sub">Glutes Isolation — Full glute focus, minimal thighs.</div>
+      <div class="day-card open">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num teal">2</div>
+          <div class="day-info"><div class="day-name">Glutes (Isolation)</div><div class="day-focus">5 exercises + hold finisher</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <div class="section-label">Exercises</div>
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num teal">1</div><div class="exercise-name">Band Hip Thrust</div><div class="exercise-sets teal">4×12</div></li>
+            <li class="exercise-item"><div class="exercise-num teal">2</div><div class="exercise-name">Band Glute Bridges</div><div class="exercise-sets teal">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num teal">3</div><div class="exercise-name">Band Donkey Kicks</div><div class="exercise-sets teal">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num teal">4</div><div class="exercise-name">Band Fire Hydrants</div><div class="exercise-sets teal">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num teal">5</div><div class="exercise-name">Glute Bridge Hold</div><div class="exercise-sets teal">30s×3</div></li>
+          </ul>
+          <div class="finisher-box teal">
+            <span class="fire">🍑</span>
+            <span>Full glute focus — minimal thigh activation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div id="page-day3" class="page">
+      <div class="section-title">Day 3</div>
+      <div class="section-sub">Back, Biceps & Core — Building that strong back and defined waist.</div>
+      <div class="day-card open">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num coral">3</div>
+          <div class="day-info"><div class="day-name">Back & Biceps</div><div class="day-focus">5 exercises</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num coral">1</div><div class="exercise-name">Band Bent Over Row</div><div class="exercise-sets coral">4×12</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">2</div><div class="exercise-name">Single Arm Band Row</div><div class="exercise-sets coral">3×10</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">3</div><div class="exercise-name">Band Reverse Fly</div><div class="exercise-sets coral">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">4</div><div class="exercise-name">Band Straight Arm Pulldown</div><div class="exercise-sets coral">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">5</div><div class="exercise-name">Band Bicep Curl</div><div class="exercise-sets coral">3×12</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num coral">3</div>
+          <div class="day-info"><div class="day-name">Core (no obliques)</div><div class="day-focus">3 exercises</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num coral">1</div><div class="exercise-name">Leg Raises</div><div class="exercise-sets coral">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">2</div><div class="exercise-name">Reverse Crunch</div><div class="exercise-sets coral">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num coral">3</div><div class="exercise-name">Plank</div><div class="exercise-sets coral">30s×3</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div id="page-day4" class="page">
+      <div class="section-title">Day 4</div>
+      <div class="section-sub">Glutes & Upper Mix — Shape day. Sculpt everything.</div>
+      <div class="day-card open">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num amber">4</div>
+          <div class="day-info"><div class="day-name">Glutes (Shape)</div><div class="day-focus">5 exercises</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num amber">1</div><div class="exercise-name">Band Hip Thrust</div><div class="exercise-sets amber">4×10</div></li>
+            <li class="exercise-item"><div class="exercise-num amber">2</div><div class="exercise-name">Band Romanian Deadlift</div><div class="exercise-sets amber">4×12</div></li>
+            <li class="exercise-item"><div class="exercise-num amber">3</div><div class="exercise-name">Single Leg Glute Bridge</div><div class="exercise-sets amber">3×10</div></li>
+            <li class="exercise-item"><div class="exercise-num amber">4</div><div class="exercise-name">Band Kickbacks</div><div class="exercise-sets amber">3×15</div></li>
+            <li class="exercise-item"><div class="exercise-num amber">5</div><div class="exercise-name">Frog Pumps</div><div class="exercise-sets amber">3×20</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header" onclick="toggleCard(this)">
+          <div class="day-num amber">4</div>
+          <div class="day-info"><div class="day-name">Upper (light tone)</div><div class="day-focus">2 exercises</div></div>
+          <div class="day-toggle">▾</div>
+        </div>
+        <div class="day-body">
+          <ul class="exercise-list">
+            <li class="exercise-item"><div class="exercise-num amber">1</div><div class="exercise-name">Band Lateral → Front Raise</div><div class="exercise-sets amber">3×12</div></li>
+            <li class="exercise-item"><div class="exercise-num amber">2</div><div class="exercise-name">Band Tricep Kickbacks</div><div class="exercise-sets amber">3×12</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div id="page-tips" class="page">
+      <div class="section-title">Key Reminders</div>
+      <div class="section-sub">These make the difference between okay results and amazing results.</div>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">🐢</div>
+          <div class="tip-title">Slow reps</div>
+          <div class="tip-desc">3 seconds on the way down. Control every rep — don't let momentum do the work.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">💫</div>
+          <div class="tip-title">Squeeze at top</div>
+          <div class="tip-desc">Hold 2 seconds at peak contraction. This is where the magic happens for glutes and shoulders.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🔥</div>
+          <div class="tip-title">Go near fatigue</div>
+          <div class="tip-desc">Last 2 reps should be challenging. If it's easy, use a stronger band or add a rep.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">⏱️</div>
+          <div class="tip-title">Short rest</div>
+          <div class="tip-desc">Keep rest at 30–45 seconds between sets to maintain intensity and burn.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📈</div>
+          <div class="tip-title">Progressive overload</div>
+          <div class="tip-desc">Every 2 weeks, add reps or switch to a heavier band to avoid plateaus.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">💧</div>
+          <div class="tip-title">Stay hydrated</div>
+          <div class="tip-desc">Drink water before, during, and after. It affects performance and recovery.</div>
+        </div>
+      </div>
+
+      <div class="reminder-box">
+        <h3>The formula that works</h3>
+        <div class="reminder-row"><span>✓</span> Slow reps (3 sec down) + squeeze at top (2 sec)</div>
+        <div class="reminder-row"><span>✓</span> Go near fatigue every set</div>
+        <div class="reminder-row"><span>✓</span> Short rest (30–45 sec) between sets</div>
+        <div class="reminder-row"><span>✓</span> Stay consistent — 4 days, every week</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    btn.classList.add('active');
+    const colorMap = { day1: '', day2: 'teal', day3: 'coral', day4: 'amber', tips: 'purple' };
+    const c = colorMap[id];
+    if (c) btn.classList.add(c);
+  }
+  function toggleCard(header) {
+    header.parentElement.classList.toggle('open');
+  }
+</script>
